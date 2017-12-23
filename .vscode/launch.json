@@ -1,0 +1,36 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Flash",
+			"type": "fdb",
+			"request": "launch",
+			"program": "${workspaceRoot}/export/flash/bin/HaxeflixelTutorial.swf"
+		},
+		{
+			"name": "Flash (+rebuild)",
+			"type": "fdb",
+			"request": "launch",
+			"program": "${workspaceRoot}/export/flash/bin/HaxeflixelTutorial.swf",
+			"preLaunchTask": "flash debug (build only)"
+		},
+		{
+			"name": "Windows",
+			"type": "hxcpp",
+			"request": "launch",
+			"program": "${workspaceRoot}/export/windows/cpp/bin/HaxeflixelTutorial.exe"
+		},
+		{
+			"name": "Linux",
+			"type": "hxcpp",
+			"request": "launch",
+			"program": "${workspaceRoot}/export/linux64/cpp/bin/HaxeflixelTutorial"
+		},
+		{
+			"name": "Mac",
+			"type": "hxcpp",
+			"request": "launch",
+			"program": "${workspaceRoot}/export/mac64/cpp/bin/HaxeflixelTutorial.app/Contents/MacOS/HaxeflixelTutorial"
+		}
+	]
+}
