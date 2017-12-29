@@ -27,38 +27,66 @@ class TiledLevel extends TiledMap
 	// used to draw tflixel.htmliles in that layer (without file extension). The image file must be located in the directory specified bellow.
 	private inline static var c_PATH_LEVEL_TILESHEETS = "assets/images/";
 	
+	// Initializing arrays of types of tiles
+  public var tilesLayerArray:Array<TiledTileLayer> = [];
+	public var objectsLayerArray:Array<TiledObjectLayer> = [];
+	public var imagesLayerArray:Array<TiledImageLayer> = [];
+
 	// Array of tilemaps used for collision
-	public var wallTiles:FlxGroup;
-	//public var objectsLayer:FlxGroup;
+	public var wallTiles:FlxGroup = new FlxGroup();
+	public var objectsLayer:FlxGroup = new FlxGroup();
 	private var collidableTileLayers:Array<FlxTilemap>;
 	
+	public var backgroundLayer:FlxGroup = new FlxGroup();
 	// Sprites of images layers
 	//public var imagesLayer:FlxGroup;
+
+  //LOOPAR NOS LAYER TYPES E SALVAR CADA TIPO NA SUA VARIAVEL
+	
+	//RETORNAR O VALOR ONDE O JOGADOR DEVE COMECAR
 	
 	public function new(tiledLevel:Dynamic, state:PlayState)
 	{
 		super(tiledLevel);
 		
 		//imagesLayer = new FlxGroup();
-		wallTiles = new FlxGroup();
+		//wallTiles = new FlxGroup();
+		//backgroundLayer = new FlxGroup();
 		//objectsLayer = new FlxGroup();
 		
 		FlxG.camera.setScrollBoundsRect(0, 0, fullWidth, fullHeight, true);
 		
 		//loadImages();
-		//loadObjects(state);
-		trace(layers);
+		loadObjects(state);
+
 		// Load Tile Maps
 		for (layer in layers)
 		{
-			/*if (layer.type != TiledLayerType.TILE) continue;
+
+			switch (layer.type)
+			{
+				case TiledLayerType.TILE:
+					tilesLayerArray.push(cast layer);
+				case TiledLayerType.OBJECT:
+					objectsLayerArray.push(cast layer);
+				case TiledLayerType.IMAGE:
+					imagesLayerArray.push(cast layer);
+				default: 
+				  throw "Unknown Tile type found!";
+			}
+
+			if (layer.type != TiledLayerType.TILE) continue;
 			var tileLayer:TiledTileLayer = cast layer;
-			
+
+			//PEGAR O PATH DO ARQUIVO .PNG
+      trace(tileLayer.map.tilesetArray);			
+
+			//AI NAO VAI PRECISAR DESSA BOSTA AQUI
 			var tileSheetName:String = tileLayer.properties.get("tileset");
 			
 			if (tileSheetName == null)
 				throw "'tileset' property not defined for the '" + tileLayer.name + "' layer. Please add the property to the layer.";
-				
+		  //trace(tilesets);
 			var tileSet:TiledTileSet = null;
 			for (ts in tilesets)
 			{
@@ -73,33 +101,12 @@ class TiledLevel extends TiledMap
 				throw "Tileset '" + tileSheetName + " not found. Did you misspell the 'tilesheet' property in " + tileLayer.name + "' layer?";
 				
 			var imagePath 		= new Path(tileSet.imageSource);
-			var processedPath 	= c_PATH_LEVEL_TILESHEETS + imagePath.file + "." + imagePath.ext;
-			
+			var processedPath 	= AssetPaths.tiles__png; //c_PATH_LEVEL_TILESHEETS + imagePath.file + "." + imagePath.ext;
+
 			// could be a regular FlxTilemap if there are no animated tiles
 			var tilemap = new FlxTilemapExt();
 			tilemap.loadMapFromArray(tileLayer.tileArray, width, height, processedPath,
 				tileSet.tileWidth, tileSet.tileHeight, OFF, tileSet.firstGID, 1, 1);
-			
-			if (tileLayer.properties.contains("animated"))
-			{
-				var tileset = tilesets["level"];
-				var specialTiles:Map<Int, TiledTilePropertySet> = new Map();
-				for (tileProp in tileset.tileProps)
-				{
-					if (tileProp != null && tileProp.animationFrames.length > 0)
-					{
-						specialTiles[tileProp.tileID + tileset.firstGID] = tileProp;
-					}
-				}
-				var tileLayer:TiledTileLayer = cast layer;
-				tilemap.setSpecialTiles([
-					for (tile in tileLayer.tiles)
-						if (tile != null && specialTiles.exists(tile.tileID))
-							getAnimatedTile(specialTiles[tile.tileID], tileset)
-						else null
-				]);
-			}
-			
 			
 			if (tileLayer.properties.contains("nocollide"))
 			{
@@ -110,9 +117,9 @@ class TiledLevel extends TiledMap
 				if (collidableTileLayers == null)
 					collidableTileLayers = new Array<FlxTilemap>();
 				
-				foregroundTiles.add(tilemap);
+				wallTiles.add(tilemap);
 				collidableTileLayers.push(tilemap);
-			}*/
+			}
 		}
 	}
 
@@ -126,7 +133,7 @@ class TiledLevel extends TiledMap
 			(1000 / props.animationFrames[0].duration)
 		);
 		return special;
-	}
+	}*/
 	
 	public function loadObjects(state:PlayState)
 	{
@@ -137,13 +144,13 @@ class TiledLevel extends TiledMap
 			var objectLayer:TiledObjectLayer = cast layer;
 
 			//collection of images layer
-			if (layer.name == "images")
+			/*if (layer.name == "images")
 			{
 				for (o in objectLayer.objects)
 				{
 					loadImageObject(o);
 				}
-			}
+			}*/
 			
 			//objects layer
 			if (layer.name == "objects")
@@ -155,7 +162,7 @@ class TiledLevel extends TiledMap
 			}
 		}
 	}
-	
+	/*
 	private function loadImageObject(object:TiledObject)
 	{
 		var tilesImageCollection:TiledTileSet = this.getTileSet("imageCollection");
@@ -195,7 +202,7 @@ class TiledLevel extends TiledMap
 		}
 
 		backgroundLayer.add(decoSprite);
-	}
+	}*/
 	
 	private function loadObject(state:PlayState, o:TiledObject, g:TiledObjectLayer, group:FlxGroup)
 	{
@@ -209,7 +216,8 @@ class TiledLevel extends TiledMap
 		switch (o.type.toLowerCase())
 		{
 			case "player_start":
-				var player = new FlxSprite(x, y);
+				//trace("player_startXXXXXXXXXXXXXXXxx" + o.x + " asdfasdf " + o.y);
+				/*var player = new FlxSprite(x, y);
 				player.makeGraphic(32, 32, 0xffaa1111);
 				player.maxVelocity.x = 160;
 				player.maxVelocity.y = 400;
@@ -217,7 +225,7 @@ class TiledLevel extends TiledMap
 				player.drag.x = player.maxVelocity.x * 4;
 				FlxG.camera.follow(player);
 				//state.player = player;
-				group.add(player);
+				group.add(player);*/
 				
 			case "floor":
 				var floor = new FlxObject(x, y, o.width, o.height);
@@ -237,7 +245,7 @@ class TiledLevel extends TiledMap
 				group.add(exit);
 		}
 	}
-
+/*
 	public function loadImages()
 	{
 		for (layer in layers)
