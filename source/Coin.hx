@@ -4,7 +4,6 @@ import flixel.FlxSprite;
 import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
 
-
 class Coin extends FlxSprite {
   public function new(X:Float=0, Y:Float=0) {
     super(X, Y);

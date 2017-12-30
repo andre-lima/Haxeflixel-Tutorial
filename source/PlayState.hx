@@ -24,6 +24,10 @@ class PlayState extends FlxState
 	private var _player:Player;
 	private var _grpCoins:FlxTypedGroup<Coin>;
 	private var _grpEnemies:FlxTypedGroup<Enemy>;
+
+	private var _hud:HUD;
+	private var _money:Int = 0;
+	private var _health:Int = 5;
 	
 	private var _map:TiledMap;
  	private var _mWalls:FlxTilemap;
@@ -52,6 +56,9 @@ class PlayState extends FlxState
 		}
 
 		FlxG.camera.follow(_player, TOPDOWN, 1);
+
+		_hud = new HUD();
+ 		add(_hud);
 		
 		super.create();
 	}
@@ -83,6 +90,8 @@ class PlayState extends FlxState
 	private function playerTouchCoin(P:Player, C:Coin):Void	{
 		if (P.alive && P.exists && C.alive && C.exists)	{
 			C.kill();
+			_money++;
+ 			_hud.updateHUD(_health, _money);
 		}
 	}
 
