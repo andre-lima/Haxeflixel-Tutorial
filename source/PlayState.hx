@@ -40,12 +40,15 @@ class PlayState extends FlxState
 		_grpCoins = new FlxTypedGroup<Coin>();
  		add(_grpCoins);
 
+		_grpEnemies = new FlxTypedGroup<Enemy>();
+ 		add(_grpEnemies);
+
 		_player = new Player();
     add(_player);
 
 	  var tmpMap:TiledObjectLayer = cast _map.getLayer("entities");
 		for (e in tmpMap.objects)	{
-				placeEntities(e.type, e.xmlData.x);
+				placeEntities(e.type, e.xmlData.x, e.properties);
 		}
 
 		FlxG.camera.follow(_player, TOPDOWN, 1);
@@ -58,17 +61,23 @@ class PlayState extends FlxState
 		
 		FlxG.collide(_player, _mWalls);
 		FlxG.overlap(_player, _grpCoins, playerTouchCoin);
+		FlxG.collide(_grpEnemies, _mWalls);
+ 		_grpEnemies.forEachAlive(checkEnemyVision);
 	}
 
-	private function placeEntities(entityName:String, entityData:Xml):Void {
-			var x:Int = Std.parseInt(entityData.get("x"));
-			var y:Int = Std.parseInt(entityData.get("y"));
-			if (entityName == "player") {
-					_player.x = x;
-					_player.y = y;
-			} else if (entityName == "coin") {
-     		_grpCoins.add(new Coin(x + 4, y + 4));
- 			}
+	private function placeEntities(entityName:String, entityData:Xml, entityProperties:Dynamic):Void {
+		var x:Int = Std.parseInt(entityData.get("x"));
+		var y:Int = Std.parseInt(entityData.get("y"));
+		
+		if (entityName == "player") {
+			_player.x = x;
+			_player.y = y;
+		} else if (entityName == "coin") {
+			_grpCoins.add(new Coin(x + 4, y + 4));
+		}  else if (entityName == "enemy") {
+			trace(entityProperties);
+			_grpEnemies.add(new Enemy(x + 4, y, Std.parseInt(entityProperties.get("etype"))));
+		}
 	}
 
 	private function playerTouchCoin(P:Player, C:Coin):Void	{
@@ -76,4 +85,13 @@ class PlayState extends FlxState
 			C.kill();
 		}
 	}
+
+	private function checkEnemyVision(e:Enemy):Void {
+    if (_mWalls.ray(e.getMidpoint(), _player.getMidpoint())) {
+      e.seesPlayer = true;
+      e.playerPos.copyFrom(_player.getMidpoint());
+    }
+    else
+      e.seesPlayer = false;
+ 	}
 }
