@@ -1,11 +1,11 @@
- package;
+package;
 
- import flixel.FlxSprite;
- import flixel.FlxG;
- import flixel.math.FlxPoint;
- import flixel.FlxObject;
- import flixel.system.FlxAssets.FlxGraphicAsset;
- import flixel.util.FlxColor;
+import flixel.FlxSprite;
+import flixel.FlxG;
+import flixel.math.FlxPoint;
+import flixel.FlxObject;
+import flixel.system.FlxAssets.FlxGraphicAsset;
+import flixel.util.FlxColor;
 
 class Player extends FlxSprite {
     public var speed:Float = 200;
@@ -22,6 +22,9 @@ class Player extends FlxSprite {
         animation.add("down", [0, 1, 0, 2], 6, false);
 
         drag.x = drag.y = 1600;
+
+        setSize(8, 14);
+        offset.set(4, 2);
     }
 
     override public function update(elapsed:Float):Void {

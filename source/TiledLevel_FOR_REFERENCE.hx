@@ -45,15 +45,12 @@ class TiledLevel extends TiledMap
 	
 	//RETORNAR O VALOR ONDE O JOGADOR DEVE COMECAR
 	
-	public function new(tiledLevel:Dynamic, state:PlayState)
+	public function new(mapPath: String, tiledMapFile:String, state:PlayState)
 	{
+		mapPath = Path.addTrailingSlash(mapPath);
+    var tiledLevel = mapPath + tiledMapFile;
 		super(tiledLevel);
-		
-		//imagesLayer = new FlxGroup();
-		//wallTiles = new FlxGroup();
-		//backgroundLayer = new FlxGroup();
-		//objectsLayer = new FlxGroup();
-		
+	
 		FlxG.camera.setScrollBoundsRect(0, 0, fullWidth, fullHeight, true);
 		
 		//loadImages();
@@ -79,29 +76,12 @@ class TiledLevel extends TiledMap
 			var tileLayer:TiledTileLayer = cast layer;
 
 			//PEGAR O PATH DO ARQUIVO .PNG
-      trace(tileLayer.map.tilesetArray);			
 
-			//AI NAO VAI PRECISAR DESSA BOSTA AQUI
-			var tileSheetName:String = tileLayer.properties.get("tileset");
-			
-			if (tileSheetName == null)
-				throw "'tileset' property not defined for the '" + tileLayer.name + "' layer. Please add the property to the layer.";
-		  //trace(tilesets);
-			var tileSet:TiledTileSet = null;
-			for (ts in tilesets)
-			{
-				if (ts.name == tileSheetName)
-				{
-					tileSet = ts;
-					break;
-				}
-			}
-			
-			if (tileSet == null)
-				throw "Tileset '" + tileSheetName + " not found. Did you misspell the 'tilesheet' property in " + tileLayer.name + "' layer?";
+			var tileSet:TiledTileSet = tileLayer.map.tilesetArray[0];
+
 				
-			var imagePath 		= new Path(tileSet.imageSource);
-			var processedPath 	= AssetPaths.tiles__png; //c_PATH_LEVEL_TILESHEETS + imagePath.file + "." + imagePath.ext;
+			var imageFile = tileSet.imageSource;
+			var processedPath 	= mapPath + imageFile; //c_PATH_LEVEL_TILESHEETS + imagePath.file + "." + imagePath.ext;
 
 			// could be a regular FlxTilemap if there are no animated tiles
 			var tilemap = new FlxTilemapExt();
