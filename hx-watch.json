@@ -1,9 +1,0 @@
-{
-  "build": {
-    "program" : "openfl",
-    "buildType" : "test",
-    "src" : "source",
-    "livereload" : "export",
-    "platforms" : ["html5"]
-  }
-}

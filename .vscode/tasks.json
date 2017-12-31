@@ -11,6 +11,10 @@
 			"label": "flash debug",
 			"command": "haxelib",
 			"args": ["run", "lime", "test", "flash", "-debug", "-Dfdb"],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
 			"problemMatcher": "$haxe"
 		},
 		{
@@ -29,10 +33,6 @@
 			"label": "html5 debug",
 			"command": "haxelib",
 			"args": ["run", "lime", "test", "html5", "-debug"],
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			},
 			"problemMatcher": "$haxe"
 		},
 		{

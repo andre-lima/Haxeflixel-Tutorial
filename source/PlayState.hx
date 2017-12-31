@@ -33,7 +33,7 @@ class PlayState extends FlxState
  	private var _mWalls:FlxTilemap;
 	
 	override public function create():Void {
-		 _map = new TiledMap(AssetPaths.map__tmx);
+		_map = new TiledMap(AssetPaths.map__tmx);
 		_mWalls = new FlxTilemap();
 		_mWalls.loadMapFromArray(cast(_map.getLayer("walls"), TiledTileLayer).tileArray, _map.width, _map.height, AssetPaths.tiles__png, _map.tileWidth, _map.tileHeight, OFF, 1, 1, 3);
 		_mWalls.follow();

@@ -5,8 +5,6 @@ import flixel.FlxG;
 import flixel.math.FlxPoint;
 import flixel.math.FlxVelocity;
 import flixel.FlxObject;
-import flixel.system.FlxAssets.FlxGraphicAsset;
-import flixel.util.FlxColor;
 
 class Enemy extends FlxSprite
 {
