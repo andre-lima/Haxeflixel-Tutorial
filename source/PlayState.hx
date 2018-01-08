@@ -19,6 +19,7 @@ import flixel.addons.tile.FlxTilemapExt;
 import flixel.addons.tile.FlxTileSpecial;
 import flixel.util.FlxColor;
 import flixel.FlxObject;
+import flixel.system.FlxSound;
 using flixel.util.FlxSpriteUtil;
 
 class PlayState extends FlxState
@@ -39,6 +40,8 @@ class PlayState extends FlxState
 
 	private var _inCombat:Bool = false;
  	private var _combatHud:CombatHUD;
+
+	private var _sndCoin:FlxSound;
 	
 	override public function create():Void {
 		_map = new TiledMap(AssetPaths.map__tmx);
@@ -70,6 +73,8 @@ class PlayState extends FlxState
 
 		_combatHud = new CombatHUD();
  		add(_combatHud);
+
+		_sndCoin = FlxG.sound.load(AssetPaths.coin__wav);
 		
 		super.create();
 	}
@@ -162,6 +167,7 @@ class PlayState extends FlxState
 
 	private function playerTouchCoin(P:Player, C:Coin):Void	{
 		if (P.alive && P.exists && C.alive && C.exists)	{
+			_sndCoin.play(true);
 			C.kill();
 			_money++;
  			_hud.updateHUD(_health, _money);
