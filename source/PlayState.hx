@@ -78,7 +78,7 @@ class PlayState extends FlxState
 
 		#if !FLX_NO_MOUSE
 			FlxG.mouse.visible = false;
-		#end	
+		#end
 		
 		FlxG.camera.fade(FlxColor.BLACK, .33, true);
 		super.create();
