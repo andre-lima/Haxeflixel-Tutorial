@@ -4,6 +4,7 @@ import flixel.FlxState;
 import flixel.ui.FlxButton;
 import flixel.text.FlxText;
 import flixel.FlxG;
+import flixel.util.FlxColor;
 
 class MenuState extends FlxState {
   private var _btnPlay:FlxButton;
@@ -32,11 +33,15 @@ class MenuState extends FlxState {
 			FlxG.sound.playMusic(AssetPaths.HaxeFlixel_Tutorial_Game__mp3, 0.5, true);
 		}
 
+		FlxG.camera.fade(FlxColor.BLACK, .33, true);
 		super.create();
 	}
 
 	private function clickOptions():Void {
-			FlxG.switchState(new OptionsState());
+			FlxG.camera.fade(FlxColor.BLACK,.33, false, function()
+			{
+					FlxG.switchState(new OptionsState());
+			});
 	}
 
 	override public function update(elapsed:Float):Void	{
@@ -44,7 +49,10 @@ class MenuState extends FlxState {
 	}
 
   private function clickPlay():Void {
-			FlxG.switchState(new PlayState());
+			FlxG.camera.fade(FlxColor.BLACK, .33, false, function()
+			{
+				FlxG.switchState(new PlayState());
+			});
 	}
 
 }

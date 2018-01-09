@@ -75,7 +75,12 @@ class PlayState extends FlxState
  		add(_combatHud);
 
 		_sndCoin = FlxG.sound.load(AssetPaths.coin__wav);
+
+		#if !FLX_NO_MOUSE
+			FlxG.mouse.visible = false;
+		#end	
 		
+		FlxG.camera.fade(FlxColor.BLACK, .33, true);
 		super.create();
 	}
 

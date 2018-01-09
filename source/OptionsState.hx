@@ -85,7 +85,6 @@ class OptionsState extends FlxState
 		updateVolume();
 		
 		FlxG.camera.fade(FlxColor.BLACK, .33, true);
-		
 		super.create();
 	}
 	
